@@ -59,10 +59,6 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = ""
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
             argument = "breathe --focus"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -84,11 +80,19 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "breathe"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "order 1 kelly"
+            argument = "music"
             isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "music 4"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "order 5 kelly -s -b"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "order 12"

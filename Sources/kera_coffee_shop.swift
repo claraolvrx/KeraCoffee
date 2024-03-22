@@ -6,6 +6,7 @@
 
 import ArgumentParser
 import Foundation
+import AVFoundation
 
 @main
 struct kera_coffee_shop: ParsableCommand {
@@ -21,7 +22,7 @@ struct kera_coffee_shop: ParsableCommand {
         terminal environment more pleasant, providing a refreshing break from its
         potentially stressful use.
         """,
-        subcommands: [Menu.self, Order.self, Breathe.self]
+        subcommands: [Menu.self, Order.self, Breathe.self, Music.self, Playlist.self]
     )
         
     mutating func run() throws {
@@ -66,7 +67,8 @@ struct kera_coffee_shop: ParsableCommand {
             let artSugarAndBlow: String
         }
         
-        var menuOrders: [Int: MenuOrder] = [
+        // lazy var menuOrders: [Int: MenuOrder] = [ ]
+        lazy var menuOrders: [Int: MenuOrder] = [ // lazy - so atribui valores quando a função é executada
             1: MenuOrder(drink: "You asked for a Tea. Good Choice!", process: """
             Heating the water...
             Putting a bag of camomile leaves in the hot water...
@@ -94,14 +96,14 @@ struct kera_coffee_shop: ParsableCommand {
             Taking the espresso that you already knows...
             And adding our delicious vanilla gelato...
             Hope you like it ><
-            """, artNormal: afogattoNormal, artSugar: afogattoSugar, artBlow: afogattoBlow, artSugarAndBlow: afogattoSugarAndBlow),
+            """, artNormal: afogattoNormal, artSugar: afogattoSugar, artBlow: afogattoBlow, artSugarAndBlow: makeAfogattoSugarAndBlow(client: client)),
         ]
         
-        func run() throws {
+        mutating func run() throws { // mutating - pq está mudando a struct
             prepare()
         }
         
-        func prepare() {
+        mutating func prepare() { // mutating - pq está mudando a struct
             if orderNumber > 5 || orderNumber < 1 {
                 print("That isn't a valid order. Please choose a number between 1 and 5")}
             else {
@@ -181,3 +183,66 @@ struct Breathe: ParsableCommand {
                 }
             }
         }
+
+struct Music: ParsableCommand {
+    
+    static var configuration = CommandConfiguration(
+        abstract: "Add a number to play an specific track"
+    )
+    
+    @Argument(help: "Number of the musica")
+    var musicNumber: Int
+    
+    static var audioPlayer: AVAudioPlayer!
+    
+    func run() throws {
+        play(music: "music\(musicNumber)" )
+        RunLoop.main.run(until: .distantFuture)
+    }
+    
+    func play(music: String) {
+        do {
+            let musicURL = Bundle.module.url(forResource: music, withExtension: "mp3")!
+            Music.audioPlayer = try AVAudioPlayer(contentsOf: musicURL)
+            Music.audioPlayer.play()
+        } catch {
+            print(error)
+        }
+    }
+
+}
+
+struct Playlist: ParsableCommand {
+    
+    static var configuration = CommandConfiguration(
+        abstract: "Displays the playlist of available songs"
+    )
+    
+    func run() throws {
+        print(playlist)
+    }
+}
+
+///*
+// {
+// "user": "gabi",
+// "order": "coffee"
+// }
+// */
+//
+//struct Order: Encodable {
+//    let user: String
+//    let order: String
+//    let audioPlayer: AVAudioPlayer
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case user
+//        case order
+//    }
+//}
+//
+//let gabiOrder = Order(user: "gabi", order: "coffee") // Objeto / Instancia
+//// Objeto => JSON
+//let data = try! JSONEncoder().encode(gabiOrder) // Data / Bytes
+//// Data => JSON
+//data.write(to: URL(fileURLWithPath: "~/.keracoffee/order.json")!)

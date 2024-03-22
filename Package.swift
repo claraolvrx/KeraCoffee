@@ -20,6 +20,9 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
+            resources: [
+                .process("Audios")
+            ],
             plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
     ]
