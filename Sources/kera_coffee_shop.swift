@@ -15,12 +15,10 @@ struct kera_coffee_shop: ParsableCommand {
         abstract: "Kera Coffee Shop",
         discussion: """
         This program simulates the atmosphere of a relaxing coffee shop illustrated by
-        ASCII Art, allowing the user to place a custom order. While the order is being
-        prepared, the user can listen to relaxing music and participate in a guided
-        breathing session. After receiving the order, the user can sweeten it, blow on
-        it, or simply drink it. With a tranquil narrative, the program aims to make the
-        terminal environment more pleasant, providing a refreshing break from its
-        potentially stressful use.
+        ASCII Art, allowing the user to place a custom order, add sugar or blow it. The
+        user can also listenvto relaxing music and runs a guided breathing session. With
+        a chill narrative, the program aims to make the terminal environment more pleasant,
+        providing a refreshing break from its potentially stressful use.
         """,
         subcommands: [Menu.self, Order.self, Breathe.self, Music.self, Playlist.self]
     )
@@ -32,7 +30,7 @@ struct kera_coffee_shop: ParsableCommand {
     struct Menu: ParsableCommand {
         
         static var configuration = CommandConfiguration(
-            abstract: "Displays the menu of available drinks for ordering (code, name, description)"
+            abstract: "Displays the menu of available drinks for ordering"
         )
         
         func run() throws {
@@ -46,10 +44,10 @@ struct kera_coffee_shop: ParsableCommand {
             abstract: "Places an order for a drink"
         )
         
-        @Argument(help: "Number of the order")
+        @Argument(help: "Number of the order (Enter a number between 1 and 5)")
         var orderNumber: Int
         
-        @Argument(help: "The name of the client")
+        @Argument(help: "The name of the client (Enter a name up to 9 letters)")
         var client: String = "client"
         
         @Flag(name: .shortAndLong, help: "Sweetens your drink")
@@ -70,33 +68,37 @@ struct kera_coffee_shop: ParsableCommand {
         // lazy var menuOrders: [Int: MenuOrder] = [ ]
         lazy var menuOrders: [Int: MenuOrder] = [ // lazy - so atribui valores quando a função é executada
             1: MenuOrder(drink: "You asked for a Tea. Good Choice!", process: """
-            Heating the water...
-            Putting a bag of camomile leaves in the hot water...
-            Wait for it...
-            It's ready!
-            """, artNormal: teaNormal, artSugar: teaSugar, artBlow: teaBlow, artSugarAndBlow: teaSugarAndBlow),
-            2: MenuOrder(drink: "You asked for a Capuccino. You will love it!", process: """
+                Heating the water...
+                Putting a bag of camomile leaves in the hot water...
+                Wait for it...
+                It's ready!
+                """ , artNormal: makeTeaNormal(client: client), artSugar: makeTeaSugar(client: client), artBlow: makeTeaBlow(client: client), artSugarAndBlow: makeTeaSugarAndBlow(client: client)),
+            2: MenuOrder(drink: "You asked for a Capuccino. You will love it!", process:
+            """
             Heating the water...
             Adding coffee...
             Adding and mixing steamed milk...
             And just a bit of cinnamon...
             Have a good time ;D
-            """, artNormal: capuccinoNormal, artSugar: capuccinoSugar, artBlow: capuccinoBlow, artSugarAndBlow: capuccinoSugarAndBlow),
-            3: MenuOrder(drink: "You asked for an Espresso. That's our speciality!", process: """
+            """, artNormal: makeCapuccinoNormal(client: client), artSugar: makeCapuccinoSugar(client: client), artBlow: makeCapuccinoBlow(client: client), artSugarAndBlow: makeCapuccinoSugarAndBlow(client: client)),
+            3: MenuOrder(drink: "You asked for an Espresso. That's our speciality!", process:
+            """
             Heating the water...
             And diluting dark coffee...
             Enjoy it <3
-            """, artNormal: espressoNormal, artSugar: espressoSugar, artBlow: espressoBlow, artSugarAndBlow: espressoSugarAndBlow),
-            4: MenuOrder(drink: "You asked for a Latte. That's a classic!", process: """
+            """, artNormal: makeEspressoNormal(client: client), artSugar: makeEspressoSugar(client: client), artBlow: makeEspressoBlow(client: client), artSugarAndBlow: makeEspressoSugarAndBlow(client: client)),
+            4: MenuOrder(drink: "You asked for a Latte. That's a classic!", process:
+            """
             Heating the milk...
             And diluting dark coffee...
             Careful, it's hot :o
-            """, artNormal: latteNormal, artSugar: latteSugar, artBlow: latteBlow, artSugarAndBlow: latteSugarAndBlow),
-            5: MenuOrder(drink: "You asked for an Afogatto. Personally, that's my favorite!", process: """
+            """, artNormal: makeLatteNormal(client: client), artSugar: makeLatteSugar(client: client), artBlow: makeLatteBlow(client: client), artSugarAndBlow: makeLatteSugarAndBlow(client: client)),
+            5: MenuOrder(drink: "You asked for an Afogatto. Personally, that's my favorite!", process:
+            """
             Taking the espresso that you already knows...
             And adding our delicious vanilla gelato...
             Hope you like it ><
-            """, artNormal: afogattoNormal, artSugar: afogattoSugar, artBlow: afogattoBlow, artSugarAndBlow: makeAfogattoSugarAndBlow(client: client)),
+            """, artNormal: makeAfogattoNormal(client: client), artSugar: makeAfogattoSugar(client: client), artBlow: makeAfogattoBlow(client: client), artSugarAndBlow: makeAfogattoSugarAndBlow(client: client)),
         ]
         
         mutating func run() throws { // mutating - pq está mudando a struct
@@ -117,19 +119,22 @@ struct kera_coffee_shop: ParsableCommand {
                     print(order.process)
                     sleep(4)
                     print(order.artNormal)
+                    print()
                     sleep(3)
                     if sugar && blow {
                         print("Adding sugar and blowing your drink")
+                        print()
                         print(order.artSugarAndBlow)
-                    }
-                    else if sugar {
+                    } else if sugar {
                         print("Adding sugar to your drink")
+                        print()
                         print(order.artSugar)
-                    }
-                    else if blow {
+                    } else if blow {
                         print("Blowing your drink")
+                        print()
                         print(order.artBlow)
                     }
+                    print("Thank for visiting Kera Coffee Shop, it was a pleasure to meet you :) Come back soon!")
                 }
             }
         }
@@ -150,15 +155,15 @@ struct Breathe: ParsableCommand {
     
     func run() throws {
         func focusBreathing() {
-            let focusBreathe: [String] = ["Inspire, pelo nariz, concentrando-se apenas na sua respiração, contando 4 segundos...", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Agora expire, pelo nariz, por mais 4 segundos...", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Inspire novamente pelo nariz.", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Agora expire mais uma vez, por 4 segundos", oneBreathe, twoBreathe, threeBreathe, fourBreathe]
+            let focusBreathe: [String] = ["Inhale, through your nose, focusing only on your breathing, counting 4 seconds...", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Now exhale, through your nose, for another 4 seconds...", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Inhale again through your nose.", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Now exhale once more for 4 seconds", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Now you can focus better on your tasks!"]
             for n in 0...focusBreathe.count - 1 {
                 print(focusBreathe[n])
-                sleep(1)
+                sleep(2)
             }
         }
         
         func relaxBreathing() {
-            let relaxBreathe: [String] = ["Sente-se em uma posição confortável.", "Imagine que o ar está cheio de paz.", "Inspire e sinta que o ar está se espalhando pelo corpo todo, como uma energia positiva.", "Expire e imagine que o ar vai embora levando toda a tensão.", "Inspire novamente pelo nariz.", "Agora expire mais uma vez" ]
+            let relaxBreathe: [String] = ["Sit in a comfortable position.", "Imagine the air is filled with peace.", "Inhale and feel that the air is spreading throughout your body, like positive energy.", "Exhale and imagine that the air leaves, taking away all the tension.", "Inhale again through your nose.", "Now exhale once more.", "I hope you feel relaxed :)"]
             for n in 0...relaxBreathe.count - 1 {
                 print(relaxBreathe[n])
                 sleep(3)
@@ -190,14 +195,26 @@ struct Music: ParsableCommand {
         abstract: "Add a number to play an specific track"
     )
     
-    @Argument(help: "Number of the musica")
+    @Argument(help: "Number of the music (Enter a number between 1 and 4)")
     var musicNumber: Int
     
     static var audioPlayer: AVAudioPlayer!
     
     func run() throws {
-        play(music: "music\(musicNumber)" )
-        RunLoop.main.run(until: .distantFuture)
+        if musicNumber > 4 || musicNumber < 1 {
+            print("That isn't a valid music number. Please choose a number between 1 and 4")
+        } else {
+            var i: String?
+            while i != "q" {
+                play(music: "music\(musicNumber)" )
+                print("""
+                Enjoy your music!
+                Don't forget to turn up the volume or use headphones for better experience.
+                """)
+                RunLoop.main.run(until: .distantFuture)
+                i = readLine()
+            }
+        }
     }
     
     func play(music: String) {
@@ -209,7 +226,6 @@ struct Music: ParsableCommand {
             print(error)
         }
     }
-
 }
 
 struct Playlist: ParsableCommand {

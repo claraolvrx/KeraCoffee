@@ -55,7 +55,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "order 5 -s -b "
+            argument = "order 2 Valentina -s -b "
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -71,6 +71,18 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "help playlist"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "help music"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "breathe"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "help order"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -83,16 +95,20 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "music"
-            isEnabled = "NO">
+            argument = "music 2"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "music 4"
+            argument = "music 1"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "order 5 kelly -s -b"
-            isEnabled = "YES">
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "music 5"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "order 12"
