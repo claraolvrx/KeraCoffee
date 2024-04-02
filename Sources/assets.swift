@@ -70,7 +70,10 @@ let home: String =
       ░░░░░░░░░▓░░░░░░░▒░░▒▓▓▓▓▓▓▓░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓█████████████████████████████████▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░
                                                                                                                                                        
 
-      Type "menu" to wanna see the Menu of the coffee shop :)
+        Type 'help' to know more about the app
+
+        By: @kellyleticia and @claraolvrx on GitHub
+        Thanks for running <3
 """
 
 let menu: String =
@@ -93,8 +96,9 @@ let menu: String =
                 [4]      Latte        Dark coffee diluted in hot milk
                 [5]      Affogato     Hot espresso with vanilla gelato
             
-                Type the number of the order you want and your name to put on the cup/mug ;)
+                Use the subcommand 'order' to order an specific drink (type 'order help' for more information).
 """
+
 func processTea(){
                 """
                 Heating the water...

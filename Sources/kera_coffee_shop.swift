@@ -20,7 +20,7 @@ struct kera_coffee_shop: ParsableCommand {
         a chill narrative, the program aims to make the terminal environment more pleasant,
         providing a refreshing break from its potentially stressful use.
         """,
-        subcommands: [Menu.self, Order.self, Breathe.self, Music.self, Playlist.self]
+        subcommands: [Menu.self, Order.self, Breathe.self, Playlist.self, Music.self]
     )
         
     mutating func run() throws {
@@ -155,39 +155,63 @@ struct Breathe: ParsableCommand {
     
     func run() throws {
         func focusBreathing() {
-            let focusBreathe: [String] = ["Inhale, through your nose, focusing only on your breathing, counting 4 seconds...", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Now exhale, through your nose, for another 4 seconds...", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Inhale again through your nose.", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Now exhale once more for 4 seconds", oneBreathe, twoBreathe, threeBreathe, fourBreathe, "Now you can focus better on your tasks!"]
-            for n in 0...focusBreathe.count - 1 {
-                print(focusBreathe[n])
-                sleep(2)
+            let focusBreatheNumbers: [String] = [oneBreathe, twoBreathe, threeBreathe, fourBreathe]
+            let focusBreatheTexts: [String] = ["Inhale, through your nose, focusing only on your breathing, for 4 seconds, following the numbers below...", "Now exhale, through your mouth, for another 4 seconds, following the numbers below...", "Inhale again through your nose, following the numbers below...", "Now exhale, once more, through you mouth, following the numbers below..."]
+            
+            func displayNumbers() {
+                for n in 0...focusBreatheNumbers.count - 1 {
+                    print(focusBreatheNumbers[n])
+                    sleep(1)
+                }
             }
+            
+            print("Inicializing the focused breathing...")
+            sleep(2)
+            print()
+            for n in 1...focusBreatheTexts.count {
+                print(focusBreatheTexts[n-1])
+                print()
+                sleep(3)
+                displayNumbers()
+            }
+            print()
+            print("Now you can focus better on your tasks!")
+            print()
         }
         
         func relaxBreathing() {
-            let relaxBreathe: [String] = ["Sit in a comfortable position.", "Imagine the air is filled with peace.", "Inhale and feel that the air is spreading throughout your body, like positive energy.", "Exhale and imagine that the air leaves, taking away all the tension.", "Inhale again through your nose.", "Now exhale once more.", "I hope you feel relaxed :)"]
-            for n in 0...relaxBreathe.count - 1 {
-                print(relaxBreathe[n])
-                sleep(3)
+            let relaxBreatheTexts: [String] = ["Sit in a comfortable position.", "Imagine the air is filled with peace.", "Inhale through your nose and feel that the air is spreading throughout your body, like positive energy.", "Exhale through your mouth and imagine that the air leaves, taking away all the tension.", "Inhale again through your nose.", "Now exhale, once more, through you mouth.", "Try repeating this process with you eyes closed", "Hope you feel releaxed ;)"]
+            for n in 0...relaxBreatheTexts.count - 1 {
+                print(relaxBreatheTexts[n])
+                sleep(4)
             }
         }
-            
-            if !focus && !relax {
-                var ran: Int = (Int.random(in: 0..<2))
+           
+            if focus { //se receber focus
+                focusBreathing()
+            } else if relax{ // se receber relax
+                relaxBreathing()
+            } else { //se não receber nenhum
+                let ran: Int = (Int.random(in: 0..<2)) //randomiza uma das respirações
                 if ran == 0 {
                     focusBreathing()
-                }
-                else {
+                } else {
                     relaxBreathing()
                 }
             }
-            
-            if focus {
-                focusBreathing()
-            }
-            else if relax {
-                relaxBreathing()
-                }
-            }
         }
+    }
+
+struct Playlist: ParsableCommand {
+    
+    static var configuration = CommandConfiguration(
+        abstract: "Displays the playlist of available songs"
+    )
+    
+    func run() throws {
+        print(playlist)
+    }
+}
 
 struct Music: ParsableCommand {
     
@@ -210,6 +234,8 @@ struct Music: ParsableCommand {
                 print("""
                 Enjoy your music!
                 Don't forget to turn up the volume or use headphones for better experience.
+                
+                (Press ctrl + c to stop the music)
                 """)
                 RunLoop.main.run(until: .distantFuture)
                 i = readLine()
@@ -227,38 +253,3 @@ struct Music: ParsableCommand {
         }
     }
 }
-
-struct Playlist: ParsableCommand {
-    
-    static var configuration = CommandConfiguration(
-        abstract: "Displays the playlist of available songs"
-    )
-    
-    func run() throws {
-        print(playlist)
-    }
-}
-
-///*
-// {
-// "user": "gabi",
-// "order": "coffee"
-// }
-// */
-//
-//struct Order: Encodable {
-//    let user: String
-//    let order: String
-//    let audioPlayer: AVAudioPlayer
-//    
-//    enum CodingKeys: String, CodingKey {
-//        case user
-//        case order
-//    }
-//}
-//
-//let gabiOrder = Order(user: "gabi", order: "coffee") // Objeto / Instancia
-//// Objeto => JSON
-//let data = try! JSONEncoder().encode(gabiOrder) // Data / Bytes
-//// Data => JSON
-//data.write(to: URL(fileURLWithPath: "~/.keracoffee/order.json")!)
